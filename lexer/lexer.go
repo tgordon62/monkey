@@ -71,7 +71,9 @@ func (lex *Lexer) readIdentifier() string {
 }
 
 func isLetter(ch byte) bool {
-	return 'a' <= ch && ch <= 'z' || 'A' <= ch && 'A' <= 'Z' || ch == '_'
+	return 'a' <= ch && ch <= 'z' ||
+		'A' <= ch && 'A' <= 'Z' ||
+		ch == '_'
 }
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {
