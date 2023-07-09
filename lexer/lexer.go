@@ -73,6 +73,15 @@ func (lex *Lexer) readIdentifier() string {
 	return lex.input[position:lex.position]
 }
 
+func (lex *Lexer) readNumber() string {
+	position := lex.position
+	for isDigit(lex.ch) {
+		lex.readChar()
+	}
+
+	return lex.input[position:lex.position]
+}
+
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' ||
 		'A' <= ch && 'A' <= 'Z' ||
