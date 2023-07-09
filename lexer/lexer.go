@@ -53,7 +53,7 @@ func (lex *Lexer) NextToken() token.Token {
 			tok.Literal = lex.readIdentifier()
 			return tok
 		} else {
-			tok = newToken(tok.ILLEGAL, lex.ch)
+			tok = newToken(token.ILLEGAL, lex.ch)
 		}
 	}
 
