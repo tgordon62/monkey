@@ -10,47 +10,47 @@ type Lexer struct {
 }
 
 func New(input string) *Lexer {
-	lexer := &Lexer{input: input}
-	lexer.readChar()
-	return lexer
+	lex := &Lexer{input: input}
+	lex.readChar()
+	return lex
 }
 
-func (lexer *Lexer) readChar() {
-	if lexer.readPosition >= len(lexer.input) { // End of input
-		lexer.ch = 0
+func (lex *Lexer) readChar() {
+	if lex.readPosition >= len(lex.input) { // End of input
+		lex.ch = 0
 	} else {
-		lexer.ch = lexer.input[lexer.readPosition]
+		lex.ch = lex.input[lex.readPosition]
 	}
-	lexer.position = lexer.readPosition
-	lexer.readPosition += 1
+	lex.position = lex.readPosition
+	lex.readPosition += 1
 }
 
-func (lexer *Lexer) NextToken() token.Token {
+func (lex *Lexer) NextToken() token.Token {
 	var tok token.Token
 
-	switch lexer.ch {
+	switch lex.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, lexer.ch)
+		tok = newToken(token.ASSIGN, lex.ch)
 	case ';':
-		tok = newToken(token.SEMICOLON, lexer.ch)
+		tok = newToken(token.SEMICOLON, lex.ch)
 	case '(':
-		tok = newToken(token.LPAREN, lexer.ch)
+		tok = newToken(token.LPAREN, lex.ch)
 	case ')':
-		tok = newToken(token.RPAREN, lexer.ch)
+		tok = newToken(token.RPAREN, lex.ch)
 	case ',':
-		tok = newToken(token.COMMA, lexer.ch)
+		tok = newToken(token.COMMA, lex.ch)
 	case '+':
-		tok = newToken(token.PLUS, lexer.ch)
+		tok = newToken(token.PLUS, lex.ch)
 	case '{':
-		tok = newToken(token.LBRACE, lexer.ch)
+		tok = newToken(token.LBRACE, lex.ch)
 	case '}':
-		tok = newToken(token.RBRACE, lexer.ch)
+		tok = newToken(token.RBRACE, lex.ch)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
 	}
 
-	lexer.readChar()
+	lex.readChar()
 	return tok
 }
 
