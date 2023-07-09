@@ -50,7 +50,7 @@ func (lex *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
-	default:
+	default: // TODO: come back to this and implement with first order funciton
 		if isLetter(lex.ch) {
 			tok.Literal = lex.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
