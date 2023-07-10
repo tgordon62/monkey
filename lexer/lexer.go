@@ -15,16 +15,6 @@ func New(input string) *Lexer {
 	return lex
 }
 
-func (lex *Lexer) readChar() {
-	if lex.readPosition >= len(lex.input) { // End of input
-		lex.ch = 0
-	} else {
-		lex.ch = lex.input[lex.readPosition]
-	}
-	lex.position = lex.readPosition
-	lex.readPosition += 1
-}
-
 func (lex *Lexer) NextToken() token.Token {
 	var tok token.Token
 
@@ -78,6 +68,24 @@ func (lex *Lexer) NextToken() token.Token {
 
 	lex.readChar()
 	return tok
+}
+
+func (lex *Lexer) readChar() {
+	if lex.readPosition >= len(lex.input) { // End of input
+		lex.ch = 0
+	} else {
+		lex.ch = lex.input[lex.readPosition]
+	}
+	lex.position = lex.readPosition
+	lex.readPosition += 1
+}
+
+func (lex *Lexer) peekChar() byte {
+	if lex.readPosition >= len(lex.input) {
+		return 0
+	} else {
+		return lex.input[lex.readPosition]
+	}
 }
 
 func (lex *Lexer) readIdentifier() string {
