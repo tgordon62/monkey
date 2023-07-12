@@ -68,8 +68,9 @@ func (par *Parser) parseLetStatement() *ast.LetStatement {
 		return nil
 	}
 
-	// TODO: skipping expressions until encounter semicolon
-	for !par.expectPeek(token.SEMICOLON) {
+	// TODO: We're skipping the expressions until we
+	// encounter a semicolon
+	for !par.curTokenIs(token.SEMICOLON) {
 		par.nextToken()
 	}
 
@@ -89,6 +90,7 @@ func (par *Parser) expectPeek(tok token.TokenType) bool {
 		par.nextToken()
 		return true
 	} else {
+		par.peekError(tok)
 		return false
 	}
 }
