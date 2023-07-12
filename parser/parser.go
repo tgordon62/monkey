@@ -27,6 +27,26 @@ func (par *Parser) nextToken() {
 	par.peekToken = par.lex.NextToken()
 }
 
-func (p *Parser) ParseProgram() *ast.Program {
-	return nil
+func (par *Parser) ParseProgram() *ast.Program {
+	program := &ast.Program{}
+	program.Statements = []ast.Statement{}
+
+	for par.curToken.Type != token.EOF {
+		stmt := par.parseStatement()
+		if stmt != nil {
+			program.Statements = append(program.Statements, stmt)
+		}
+		par.nextToken()
+	}
+
+	return program
+}
+
+func (par *Parser) parseStatement() ast.Statement {
+	switch par.curToken.Type {
+	case token.LET:
+		return par.parseLetStatement()
+	default:
+		return nil
+	}
 }
