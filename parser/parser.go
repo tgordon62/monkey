@@ -19,7 +19,7 @@ func New(lex *lexer.Lexer) *Parser {
 		lex:    lex,
 		errors: []string{},
 	}
-
+	// Read two tokens, so curToken and peekToken are both set
 	par.nextToken()
 	par.nextToken()
 
@@ -50,6 +50,8 @@ func (par *Parser) parseStatement() ast.Statement {
 	switch par.curToken.Type {
 	case token.LET:
 		return par.parseLetStatement()
+	case token.RETURN:
+		return par.parseReturnStatement()
 	default:
 		return nil
 	}
@@ -67,6 +69,20 @@ func (par *Parser) parseLetStatement() *ast.LetStatement {
 	if !par.expectPeek(token.ASSIGN) {
 		return nil
 	}
+
+	// TODO: We're skipping the expressions until we
+	// encounter a semicolon
+	for !par.curTokenIs(token.SEMICOLON) {
+		par.nextToken()
+	}
+
+	return stmt
+}
+
+func (par *Parser) parseReturnStatement() *ast.ReturnStatement {
+	stmt := &ast.ReturnStatement{Token: par.curToken}
+
+	par.nextToken()
 
 	// TODO: We're skipping the expressions until we
 	// encounter a semicolon
