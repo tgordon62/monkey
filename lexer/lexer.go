@@ -66,7 +66,7 @@ func (lex *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
-	default: // TODO: come back to this and implement with first order funciton
+	default:
 		if isLetter(lex.ch) {
 			tok.Literal = lex.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
@@ -121,8 +121,8 @@ func (lex *Lexer) readNumber() string {
 }
 
 func isLetter(ch byte) bool {
-	return 'a' <= ch && ch <= 'z' ||
-		'A' <= ch && 'A' <= 'Z' ||
+	return ('a' <= ch && ch <= 'z') ||
+		('A' <= ch && 'A' <= 'Z') ||
 		ch == '_'
 }
 
