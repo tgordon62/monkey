@@ -37,6 +37,17 @@ const (
 	CALL        // myFunction(X)
 )
 
+var precedences = map[token.TokenType]int{
+	token.EQ:       EQUALS,
+	token.NOT_EQ:   EQUALS,
+	token.LT:       LESSGREATER,
+	token.GT:       LESSGREATER,
+	token.PLUS:     SUM,
+	token.MINUS:    SUM,
+	token.SLASH:    PRODUCT,
+	token.ASTERISK: PRODUCT,
+}
+
 // Create a new parser instance and reutrn it. Accepts a Lexer instance
 // which will be parsed.
 func New(lex *lexer.Lexer) *Parser {
@@ -45,12 +56,23 @@ func New(lex *lexer.Lexer) *Parser {
 		errors: []string{},
 	}
 
-	// Add parsing functions to maps
 	par.prefixParseFns = make(map[token.TokenType]prefixParseFn)
+	par.infixParseFns = make(map[token.TokenType]infixParseFn)
+
+	// Add parsing functions to maps
 	par.registerPrefix(token.IDENT, par.parseIdentifier)
 	par.registerPrefix(token.INT, par.parseIntegerLiteral)
 	par.registerPrefix(token.BANG, par.parsePrefixExpression)
 	par.registerPrefix(token.MINUS, par.parsePrefixExpression)
+
+	par.registerInfix(token.PLUS, par.parseInfixExpression)
+	par.registerInfix(token.MINUS, par.parseInfixExpression)
+	par.registerInfix(token.SLASH, par.parseInfixExpression)
+	par.registerInfix(token.ASTERISK, par.parseInfixExpression)
+	par.registerInfix(token.EQ, par.parseInfixExpression)
+	par.registerInfix(token.NOT_EQ, par.parseInfixExpression)
+	par.registerInfix(token.LT, par.parseInfixExpression)
+	par.registerInfix(token.GT, par.parseInfixExpression)
 
 	// Read two tokens, so curToken and peekToken are both set
 	par.nextToken()
@@ -146,9 +168,21 @@ func (par *Parser) parseExpression(precedence int) ast.Expression {
 	}
 	leftExp := prefix()
 
+	for !par.peekTokenIs(token.SEMICOLON) && precedence < par.peekPrecedence() {
+		infix := par.infixParseFns[par.peekToken.Type]
+		if infix == nil {
+			return leftExp
+		}
+
+		par.nextToken()
+
+		leftExp = infix(leftExp)
+	}
+
 	return leftExp
 }
 
+// Parse an expression with a prefix operator.
 func (par *Parser) parsePrefixExpression() ast.Expression {
 	expression := &ast.PrefixExpression{
 		Token:    par.curToken,
@@ -158,6 +192,21 @@ func (par *Parser) parsePrefixExpression() ast.Expression {
 	par.nextToken()
 
 	expression.Right = par.parseExpression(PREFIX)
+
+	return expression
+}
+
+// Parse an expression with an infix operator
+func (par *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
+	expression := &ast.InfixExpression{
+		Token:    par.curToken,
+		Operator: par.curToken.Literal,
+		Left:     left,
+	}
+
+	precedence := par.curPrecedence()
+	par.nextToken()
+	expression.Right = par.parseExpression(precedence)
 
 	return expression
 }
@@ -211,6 +260,22 @@ func (par *Parser) expectPeek(tok token.TokenType) bool {
 		par.peekError(tok)
 		return false
 	}
+}
+
+func (p *Parser) curPrecedence() int {
+	if p, ok := precedences[p.curToken.Type]; ok {
+		return p
+	}
+
+	return LOWEST
+}
+
+func (p *Parser) peekPrecedence() int {
+	if p, ok := precedences[p.peekToken.Type]; ok {
+		return p
+	}
+
+	return LOWEST
 }
 
 // Add a function for parsing prefix operators to the prefixParseFns map.
