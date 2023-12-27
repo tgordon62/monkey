@@ -6,6 +6,7 @@ import (
 	"monkey-interpreter/ast"
 	"monkey-interpreter/lexer"
 	"monkey-interpreter/token"
+	"strconv"
 )
 
 // Structure of a parser instance.
@@ -47,6 +48,7 @@ func New(lex *lexer.Lexer) *Parser {
 	// Add parsing functions to maps
 	par.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	par.registerPrefix(token.IDENT, par.parseIdentifier)
+	par.registerPrefix(token.INT, par.parseIntegerLiteral)
 
 	// Read two tokens, so curToken and peekToken are both set
 	par.nextToken()
@@ -133,6 +135,7 @@ func (par *Parser) parseExpressionStatement() ast.Statement {
 	return stmt
 }
 
+// Parse an expression.
 func (par *Parser) parseExpression(precedence int) ast.Expression {
 	prefix := par.prefixParseFns[par.curToken.Type]
 	if prefix == nil {
@@ -143,8 +146,25 @@ func (par *Parser) parseExpression(precedence int) ast.Expression {
 	return leftExp
 }
 
+// Parse an identifier.
 func (par *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: par.curToken, Value: par.curToken.Literal}
+}
+
+// Parse an integer literal.
+func (par *Parser) parseIntegerLiteral() ast.Expression {
+	lit := &ast.IntegerLiteral{Token: par.curToken}
+
+	value, err := strconv.ParseInt(par.curToken.Literal, 0, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as integer", par.curToken.Literal)
+		par.errors = append(par.errors, msg)
+		return nil
+	}
+
+	lit.Value = value
+
+	return lit
 }
 
 // Update the current token of the parser instace to the peek token, and then
