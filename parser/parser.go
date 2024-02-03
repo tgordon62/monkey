@@ -11,7 +11,7 @@ import (
 
 // Structure of a parser instance.
 type Parser struct {
-	lex       *lexer.Lexer
+	l         *lexer.Lexer
 	errors    []string
 	curToken  token.Token
 	peekToken token.Token
@@ -50,9 +50,9 @@ var precedences = map[token.TokenType]int{
 
 // Create a new parser instance and reutrn it. Accepts a Lexer instance
 // which will be parsed.
-func New(lex *lexer.Lexer) *Parser {
+func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
-		lex:    lex,
+		l:      l,
 		errors: []string{},
 	}
 
@@ -267,7 +267,7 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 // update the peek token to the next token from the Lexer.
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
-	p.peekToken = p.lex.NextToken()
+	p.peekToken = p.l.NextToken()
 }
 
 // Confirm that the Parser's current token is the same type as the parameter tok.
