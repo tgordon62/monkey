@@ -64,6 +64,8 @@ func New(lex *lexer.Lexer) *Parser {
 	par.registerPrefix(token.INT, par.parseIntegerLiteral)
 	par.registerPrefix(token.BANG, par.parsePrefixExpression)
 	par.registerPrefix(token.MINUS, par.parsePrefixExpression)
+	par.registerPrefix(token.TRUE, par.parseBoolean)
+	par.registerPrefix(token.FALSE, par.parseBoolean)
 
 	par.registerInfix(token.PLUS, par.parseInfixExpression)
 	par.registerInfix(token.MINUS, par.parseInfixExpression)
@@ -149,7 +151,7 @@ func (par *Parser) parseReturnStatement() *ast.ReturnStatement {
 
 // Parse an expression statement.
 func (par *Parser) parseExpressionStatement() ast.Statement {
-	defer untrace(trace("parseExpressionStatement"))
+	// defer untrace(trace("parseExpressionStatement"))
 
 	stmt := &ast.ExpressionStatement{Token: par.curToken}
 	stmt.Expression = par.parseExpression(LOWEST)
@@ -163,7 +165,7 @@ func (par *Parser) parseExpressionStatement() ast.Statement {
 
 // Parse an expression.
 func (par *Parser) parseExpression(precedence int) ast.Expression {
-	defer untrace(trace("parseExpression"))
+	// defer untrace(trace("parseExpression"))
 
 	prefix := par.prefixParseFns[par.curToken.Type]
 	if prefix == nil {
@@ -188,7 +190,7 @@ func (par *Parser) parseExpression(precedence int) ast.Expression {
 
 // Parse an expression with a prefix operator.
 func (par *Parser) parsePrefixExpression() ast.Expression {
-	defer untrace(trace("parsePrefixExpression"))
+	// defer untrace(trace("parsePrefixExpression"))
 
 	expression := &ast.PrefixExpression{
 		Token:    par.curToken,
@@ -204,7 +206,7 @@ func (par *Parser) parsePrefixExpression() ast.Expression {
 
 // Parse an expression with an infix operator
 func (par *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
-	defer untrace(trace("parseInfixExpression"))
+	// defer untrace(trace("parseInfixExpression"))
 
 	expression := &ast.InfixExpression{
 		Token:    par.curToken,
@@ -226,7 +228,7 @@ func (par *Parser) parseIdentifier() ast.Expression {
 
 // Parse an integer literal.
 func (par *Parser) parseIntegerLiteral() ast.Expression {
-	defer untrace(trace("parseIntegerLiteral"))
+	// defer untrace(trace("parseIntegerLiteral"))
 
 	lit := &ast.IntegerLiteral{Token: par.curToken}
 
@@ -240,6 +242,11 @@ func (par *Parser) parseIntegerLiteral() ast.Expression {
 	lit.Value = value
 
 	return lit
+}
+
+// Parse a boolean.
+func (par *Parser) parseBoolean() ast.Expression {
+	return &ast.Boolean{Token: par.curToken, Value: par.curTokenIs(token.TRUE)}
 }
 
 // Update the current token of the parser instace to the peek token, and then
