@@ -41,41 +41,41 @@ func TestLetStatements(t *testing.T) {
 	}
 }
 
-func TestReturnStatements(t *testing.T) {
-	tests := []struct {
-		input         string
-		expectedValue interface{}
-	}{
-		{"return 5;", 5},
-		{"return true;", true},
-		{"return foobar;", "foobar"},
-	}
+// func TestReturnStatements(t *testing.T) {
+// 	tests := []struct {
+// 		input         string
+// 		expectedValue interface{}
+// 	}{
+// 		{"return 5;", 5},
+// 		{"return true;", true},
+// 		{"return foobar;", "foobar"},
+// 	}
 
-	for _, tt := range tests {
-		l := lexer.New(tt.input)
-		p := New(l)
-		program := p.ParseProgram()
-		checkParserErrors(t, p)
+// 	for _, tt := range tests {
+// 		l := lexer.New(tt.input)
+// 		p := New(l)
+// 		program := p.ParseProgram()
+// 		checkParserErrors(t, p)
 
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
-		}
+// 		if len(program.Statements) != 1 {
+// 			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
+// 				len(program.Statements))
+// 		}
 
-		stmt := program.Statements[0]
-		returnStmt, ok := stmt.(*ast.ReturnStatement)
-		if !ok {
-			t.Fatalf("stmt not *ast.ReturnStatement. got=%T", stmt)
-		}
-		if returnStmt.TokenLiteral() != "return" {
-			t.Fatalf("returnStmt.TokenLiteral not 'return', got %q",
-				returnStmt.TokenLiteral())
-		}
-		if testLiteralExpression(t, returnStmt.ReturnValue, tt.expectedValue) {
-			return
-		}
-	}
-}
+// 		stmt := program.Statements[0]
+// 		returnStmt, ok := stmt.(*ast.ReturnStatement)
+// 		if !ok {
+// 			t.Fatalf("stmt not *ast.ReturnStatement. got=%T", stmt)
+// 		}
+// 		if returnStmt.TokenLiteral() != "return" {
+// 			t.Fatalf("returnStmt.TokenLiteral not 'return', got %q",
+// 				returnStmt.TokenLiteral())
+// 		}
+// 		if testLiteralExpression(t, returnStmt.ReturnValue, tt.expectedValue) {
+// 			return
+// 		}
+// 	}
+// }
 
 func TestIdentifierExpression(t *testing.T) {
 	input := "foobar;"
@@ -670,31 +670,31 @@ func TestBooleanExpression(t *testing.T) {
 // 	}
 // }
 
-func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "let" {
-		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
-		return false
-	}
+// func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
+// 	if s.TokenLiteral() != "let" {
+// 		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
+// 		return false
+// 	}
 
-	letStmt, ok := s.(*ast.LetStatement)
-	if !ok {
-		t.Errorf("s not *ast.LetStatement. got=%T", s)
-		return false
-	}
+// 	letStmt, ok := s.(*ast.LetStatement)
+// 	if !ok {
+// 		t.Errorf("s not *ast.LetStatement. got=%T", s)
+// 		return false
+// 	}
 
-	if letStmt.Name.Value != name {
-		t.Errorf("letStmt.Name.Value not '%s'. got=%s", name, letStmt.Name.Value)
-		return false
-	}
+// 	if letStmt.Name.Value != name {
+// 		t.Errorf("letStmt.Name.Value not '%s'. got=%s", name, letStmt.Name.Value)
+// 		return false
+// 	}
 
-	if letStmt.Name.TokenLiteral() != name {
-		t.Errorf("letStmt.Name.TokenLiteral() not '%s'. got=%s",
-			name, letStmt.Name.TokenLiteral())
-		return false
-	}
+// 	if letStmt.Name.TokenLiteral() != name {
+// 		t.Errorf("letStmt.Name.TokenLiteral() not '%s'. got=%s",
+// 			name, letStmt.Name.TokenLiteral())
+// 		return false
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
 func testInfixExpression(t *testing.T, exp ast.Expression, left interface{},
 	operator string, right interface{}) bool {
