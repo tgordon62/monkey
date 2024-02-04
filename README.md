@@ -20,8 +20,6 @@ An interpreter for the Monkey programming languge made by Thorsten Ball, and ext
 
 ## Installation
 
-Describe how to install your interpreter. Include any dependencies and step-by-step instructions for users to get started.
-
 ```bash
 git clone https://github.com/tgordon62/monkey-interpreter.git
 
