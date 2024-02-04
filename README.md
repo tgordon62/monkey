@@ -1,14 +1,13 @@
-# An interpreter for the Monkey programming languge made by Thorsten Ball, and extended by me.
-
-# Project Name
+# Monkey Interpreter
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/tgordon62/monkey-interpreter.svg)](https://github.com/tgordon62/monkey-interpreter)
-[![GitHub Issues](https://img.shields.io/github/issues/tgordon62/monkey-interpreter.svg)](https://github.com/tgordon62/monkey-interpreter/issues)
+<!-- [![GitHub Stars](https://img.shields.io/github/stars/tgordon62/monkey-interpreter.svg)](https://github.com/tgordon62/monkey-interpreter)
+[![GitHub Issues](https://img.shields.io/github/issues/tgordon62/monkey-interpreter.svg)](https://github.com/tgordon62/monkey-interpreter/issues) -->
 
 ## Overview
 
-Briefly describe your interpreter project here. Provide an overview of its purpose, features, and any other relevant information.
+An interpreter for the Monkey programming languge made by Thorsten Ball, and extended by me.
+
 
 ## Table of Contents
 
