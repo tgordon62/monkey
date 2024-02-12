@@ -1,6 +1,8 @@
 package lexer
 
-import "monkey-interpreter/token"
+import (
+	"monkey-interpreter/token"
+)
 
 type Lexer struct {
 	input        string
@@ -129,7 +131,7 @@ func (l *Lexer) readNumber() string {
 
 func isLetter(ch byte) bool {
 	return ('a' <= ch && ch <= 'z') ||
-		('A' <= ch && 'A' <= 'Z') ||
+		('A' <= ch && ch <= 'Z') ||
 		ch == '_'
 }
 
