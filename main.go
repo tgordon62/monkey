@@ -62,12 +62,12 @@ func fileArgument(user *user.User) {
 	}
 
 	env := object.NewEnvironment()
+	macroEnv := object.NewEnvironment()
 
-	evaluated := evaluator.Eval(program, env)
-	if evaluated != nil {
-		io.WriteString(os.Stdout, evaluated.Inspect())
-		io.WriteString(os.Stdout, "\n")
-	}
+	evaluator.DefineMacros(program, macroEnv)
+	expanded := evaluator.ExpandMacros(program, macroEnv)
+
+	evaluator.Eval(expanded, env)
 }
 
 func printParserErrors(out io.Writer, errors []string) {
