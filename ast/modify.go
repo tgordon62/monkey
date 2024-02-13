@@ -2,7 +2,8 @@ package ast
 
 type ModifierFunc func(Node) Node
 
-// TODO: Add error handling where wildcard used
+// TODO: Add error handling where wildcard used.
+// TODO: Update Token field of parent nodes.
 func Modify(node Node, modifier ModifierFunc) Node {
 	switch node := node.(type) {
 	case *Program:

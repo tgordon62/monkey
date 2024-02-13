@@ -42,6 +42,7 @@ func isUnquoteCall(node ast.Node) bool {
 }
 
 // TODO: Error handling
+// TODO: After implementing line numbered tokens... revisit.s
 func convertObjectToASTNode(obj object.Object) ast.Node {
 	switch obj := obj.(type) {
 	case *object.Integer:
@@ -59,6 +60,9 @@ func convertObjectToASTNode(obj object.Object) ast.Node {
 			t = token.Token{Type: token.FALSE, Literal: "false"}
 		}
 		return &ast.Boolean{Token: t, Value: obj.Value}
+
+	case *object.Quote:
+		return obj.Node
 	default:
 		return nil
 	}
