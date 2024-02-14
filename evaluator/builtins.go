@@ -2,7 +2,7 @@ package evaluator
 
 import (
 	"fmt"
-	"monkey-interpreter/object"
+	"monkey/object"
 )
 
 // TODO: map

@@ -1,10 +1,10 @@
 package evaluator
 
 import (
-	"monkey-interpreter/ast"
-	"monkey-interpreter/lexer"
-	"monkey-interpreter/object"
-	"monkey-interpreter/parser"
+	"monkey/ast"
+	"monkey/lexer"
+	"monkey/object"
+	"monkey/parser"
 	"testing"
 )
 

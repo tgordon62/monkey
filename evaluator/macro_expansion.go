@@ -1,8 +1,8 @@
 package evaluator
 
 import (
-	"monkey-interpreter/ast"
-	"monkey-interpreter/object"
+	"monkey/ast"
+	"monkey/object"
 )
 
 // TODO: Support nested macros
